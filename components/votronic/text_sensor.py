@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 from esphome.components import text_sensor
 import esphome.config_validation as cv
-from esphome.const import CONF_ID
+from esphome.const import ENTITY_CATEGORY_DIAGNOSTIC
 
 from . import CONF_VOTRONIC_ID, VOTRONIC_COMPONENT_SCHEMA
 
@@ -39,40 +39,50 @@ TEXT_SENSORS = [
 CONFIG_SCHEMA = VOTRONIC_COMPONENT_SCHEMA.extend(
     {
         cv.Optional(CONF_BATTERY_STATUS): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:alert-circle-outline"
+            icon="mdi:alert-circle-outline",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_CHARGER_MODE_SETTING): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:car-battery"
+            icon="mdi:car-battery",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_CHARGER_CONTROLLER_STATUS): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:heart-pulse"
+            icon="mdi:heart-pulse",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_CHARGER_BATTERY_STATUS): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:alert-circle-outline"
+            icon="mdi:alert-circle-outline",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(
             CONF_CHARGING_CONVERTER_BATTERY_STATUS
         ): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:car-battery"
+            icon="mdi:car-battery",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(
             CONF_CHARGING_CONVERTER_CONTROLLER_STATUS
         ): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:heart-pulse"
+            icon="mdi:heart-pulse",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(
             CONF_CHARGING_CONVERTER_MODE_SETTING
         ): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:car-battery"
+            icon="mdi:car-battery",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_PV_MODE_SETTING): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:car-battery"
+            icon="mdi:car-battery",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_PV_BATTERY_STATUS): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:alert-circle-outline"
+            icon="mdi:alert-circle-outline",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_PV_CONTROLLER_STATUS): text_sensor.text_sensor_schema(
-            text_sensor.TextSensor, icon="mdi:heart-pulse"
+            icon="mdi:heart-pulse",
+            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
     }
 )
@@ -83,6 +93,5 @@ async def to_code(config):
     for key in TEXT_SENSORS:
         if key in config:
             conf = config[key]
-            sens = cg.new_Pvariable(conf[CONF_ID])
-            await text_sensor.register_text_sensor(sens, conf)
+            sens = await text_sensor.new_text_sensor(conf)
             cg.add(getattr(hub, f"set_{key}_text_sensor")(sens))

@@ -5,6 +5,7 @@ from esphome.const import CONF_ID, CONF_THROTTLE
 
 AUTO_LOAD = ["binary_sensor", "sensor", "text_sensor"]
 CODEOWNERS = ["@syssi"]
+DEPENDENCIES = ["ble_client"]
 MULTI_CONF = True
 
 CONF_VOTRONIC_BLE_ID = "votronic_ble_id"
@@ -14,7 +15,8 @@ VotronicBle = votronic_ble_ns.class_(
     "VotronicBle", ble_client.BLEClientNode, cg.PollingComponent
 )
 
-CONFIG_SCHEMA = (
+CONFIG_SCHEMA = cv.All(
+    cv.require_esphome_version(2026, 1, 0),
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(VotronicBle),
@@ -24,7 +26,7 @@ CONFIG_SCHEMA = (
         }
     )
     .extend(ble_client.BLE_CLIENT_SCHEMA)
-    .extend(cv.polling_component_schema("2s"))
+    .extend(cv.polling_component_schema("2s")),
 )
 
 # Centralized schema for subcomponents
